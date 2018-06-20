@@ -2139,6 +2139,11 @@ public:
 
     /* link bucket */
     if (be.linked) {
+      if (!old_be.owner.empty() && be.owner != old_be.owner) {
+        ret = rgw_unlink_bucket(store, old_be.owner, old_be.bucket.tenant, old_be.bucket.name, false);
+        if (ret < 0)
+          return ret;
+      }
       ret = rgw_link_bucket(store, be.owner, be.bucket, be.creation_time, false);
     } else {
       ret = rgw_unlink_bucket(store, be.owner, be.bucket.tenant,
